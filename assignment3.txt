@@ -73,3 +73,30 @@ left join PARTICIPATED
 GROUP by PARTICIPATED.trip_id
 HAVING totalElev > 500000
 ORDER BY totalElev desc
+
+---- Question 11 ----
+select c.peaksClimbed/COUNT(CLIMBER.SEX) as avgClimbs,CLIMBER.sex from CLIMBER
+INNER JOIN (
+ 	select COUNT(CLIMBED.peak) as peaksClimbed,CLIMBER.sex from CLIMBER
+	INNER JOIN PARTICIPATED
+		ON PARTICIPATED.NAME = CLIMBER.name
+	INNER join CLIMBED
+		on CLIMBED.trip_id = PARTICIPATED.trip_id
+	GROUP BY sex
+ ) AS c
+ ON c.sex = CLIMBER.sex
+GROUP BY climber.SEX
+
+--- Question 12 ----
+I have no idea
+
+---- Question 13 ----
+select region, max(ratio) as fraction from (SELECT PEAK.region, (c.peaksClimbed * 1.0)/(COUNT(PEAK.name) * 1.0) as ratio FROM PEAK
+INNER JOIN (
+	SELECT COUNT(DISTINCT CLIMBED.peak) as peaksClimbed, peak.region FROM PEAK
+	INNER JOIN CLIMBED
+		ON CLIMBED.PEAK = PEAK.NAME
+	GROUP BY region
+) as c
+on c.region = PEAK.region
+GROUP by PEAK.region)
