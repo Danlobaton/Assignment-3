@@ -16,7 +16,39 @@ INNER JOIN CLIMBED
 WHERE PARTICIPATED.name = 'MARK';
 
 -- Results
-
+Center Peak
+North Maggie Mountain
+Whaleback
+Kearsarge Peak
+Lion Rock
+Midway Mountain
+Mount Hale
+Mount Langley
+Pilot Knob (S)
+Whaleback
+Dragon Peak
+Mount Barnard
+Mount Guyot
+Mount Langley
+Mount Newcomb
+South Guard
+Thor Peak
+Angora Mountain
+Florence Peak
+Joe Devel Peak
+Kearsarge Peak
+Lion Rock
+Mount Guyot
+Mount Langley
+Mount McAdie
+Mount Rixford
+Muah Mountain
+Olancha Peak
+Whaleback
+Midway Mountain
+Moses Mountain
+Mount Williamson
+Needham Mountain
 
 ---- Question 3 ----
 SELECT PARTICIPATED.name FROM PEAK
@@ -26,12 +58,26 @@ INNER join PARTICIPATED
 	ON PARTICIPATED.trip_id = CLIMBED.trip_id
 WHERE PEAK.diff = 5;
 
+-- Results
+DONNA
+ELIZABETH
+JOHN
+
 ---- Question 4 ----
 SELECT COUNT(*) as numberOfClimbs, CLIMBED.PEAK FROM PARTICIPATED 
 INNER JOIN CLIMBED 
 	ON CLIMBED.TRIP_ID = PARTICIPATED.TRIP_ID
 GROUP BY CLIMBED.PEAK
 hAVING COUNT(*) = 1;
+
+-- Results
+Center Peak
+Lone Pine Peak
+Mount Gardiner
+Mount LeConte
+Mount Muir
+North Maggie Mountain
+University Peaks
 
 ---- Question 5 ----
 SELECT DISTINCT CLIMBED.peak FROM CLIMBED
@@ -41,25 +87,118 @@ INNER JOIN PEAK
 	ON PEAK.name = CLIMBED.PEAK
 WHERE PARTICIPATED.name = "JOHN" AND PEAK.elev >= 14000
 
+-- Results
+Mount Langley
+Mount Whitney
+
 ---- Question 6 ----
 SELECT map, MAX(elev) - MIN(elev) as delta FROM PEAK
-grouP BY map
+GROUP BY map
 HAVING delta > 2000
 
+-- Results
+Kearsarge Peak
+Mount Whitney
+
 ---- Question 7 ----
--- Rounded the average height to the nearest integer to cleanliness
+-- Rounded the average height to the nearest integer for cleanliness
 SELECT map, ROUND(AVG(elev)) as avgelev FROM PEAK
-grouP BY map
+GROUP BY map
 ORDER BY avgelev DESC
 
+-- Results
+Mt Williamson	13748
+Mt Langley	13561
+Mount Whitney	13493
+Mt Brewer	13334
+Mt Kaweah	12945
+Cirque Peak	12900
+Mt Clarence King	12838
+Triple Divide Peak	12657
+Mineral King	12280
+Sphinx Lakes	11717
+Kern Peak	11510
+Olancha	11302
+Lodgepole	11240
+Mt Silliman	11188
+Bartlett	11016
+Kern Lake	10545
+Sirretta Peak	9977
+Moses Mtn	9783
+Monache Mtn	9533
+Crag Peak	9480
+Silver City	9023
+Cannell Peak	8802
+Kearsarge Peak	8551
+Owens Peak	8453
+Rockhouse Basin	8360
+Ninemile Canyon	8000
+Lament Peak	7635
+Onyx	6200
+
 ---- Question 8 ----
-SELECT peak from CLIMBED
+SELECT distinct peak from CLIMBED
 inner join (
 	SELECT trip_id from PARTICIPATED
   	WHERE NAME IN ("MARK", "MARY")
   	group by trip_id
 ) as pyt
 	on pyt.trip_id = CLIMBED.trip_id
+
+-- Results
+Lone Pine Peak
+Mount Langley
+Mount Brewer
+Muah Mountain
+Thor Peak
+Kearsarge Peak
+Olancha Peak
+Mount Irvine
+Mount Guyot
+University Peak
+Mount Gardiner
+Mount LeConte
+Needham Mountain
+Sirretta Peak
+Triple Divide Peak
+Diamond Peak
+North Maggie Mountain
+Whaleback
+Center Peak
+Mount Hale
+Midway Mountain
+Pilot Knob (S)
+Lion Rock
+Mount Rixford
+Mount Jordan
+Moses Mountain
+Mount Bradley
+North Guard
+Homers Nose
+Lamont Peak
+Kern Point
+Mount Mallory
+Mount Stanford (S)
+Mount Young
+Owens Peak
+South Guard
+Glacier Ridge
+Spanish Needle
+Mount Gould
+Joe Devel Peak
+Mount McAdie
+Mount Newcomb
+Mount Williamson
+Crag Peak
+Dragon Peak
+Mount Barnard
+Angora Mountain
+Florence Peak
+Mount Stewart
+Coyote Peaks
+Kern Peak
+Vandever Mountain
+Smith Mountains
 
 ---- Question 9 ----
 SELECT PEAK.region, COUNT(PEAK.name) - c.peaksClimbed as unclimbedPeaks FROM PEAK
@@ -72,6 +211,18 @@ INNER JOIN (
 on c.region = PEAK.region
 GROUP by PEAK.region
 
+-- Results
+Region	unclimbedPeaks
+Corocoran to Whitney	1
+Great Western Divide	3
+Kaweahs and West	9
+Kearsarge Pass	4
+Kings Kern Divide	6
+Mineral King	1
+Olancha to Langley	3
+Southern Sierra	3
+Whitney to Williamson	5
+
 ---- Question 10 ----
 select CLIMBED.trip_id, SUM(peak.elev) as totalElev from CLIMBED
 left JOIN PEAK
@@ -81,6 +232,11 @@ left join PARTICIPATED
 GROUP by PARTICIPATED.trip_id
 HAVING totalElev > 500000
 ORDER BY totalElev desc
+
+-- Results
+trip_id	totalElev
+8	595895
+13	564735
 
 ---- Question 11 ----
 select c.peaksClimbed/COUNT(CLIMBER.SEX) as avgClimbs,CLIMBER.sex from CLIMBER
@@ -95,6 +251,11 @@ INNER JOIN (
  ON c.sex = CLIMBER.sex
 GROUP BY climber.SEX
 
+-- Results
+SEX	avgClimbs
+F	21
+M	15
+
 --- Question 12 ----
 I have no idea
 
@@ -108,3 +269,7 @@ INNER JOIN (
 ) as c
 on c.region = PEAK.region
 GROUP by PEAK.region)
+
+-- Results
+region	fraction
+Mineral King	0.9
