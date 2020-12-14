@@ -34,4 +34,42 @@ INNER JOIN PEAK
 WHERE PARTICIPATED.name = "JOHN" AND PEAK.elev >= 14000
 
 ---- Question 6 ----
+SELECT map, MAX(elev) - MIN(elev) as delta FROM PEAK
+grouP BY map
+HAVING delta > 2000
 
+---- Question 7 ----
+-- Rounded the average height to the nearest integer to cleanliness
+SELECT map, ROUND(AVG(elev)) as avgelev FROM PEAK
+grouP BY map
+ORDER BY avgelev DESC
+
+---- Question 8 ----
+SELECT peak from CLIMBED
+inner join (
+	SELECT trip_id from PARTICIPATED
+  	WHERE NAME IN ("MARK", "MARY")
+  	group by trip_id
+) as pyt
+	on pyt.trip_id = CLIMBED.trip_id
+
+---- Question 9 ----
+SELECT PEAK.region, COUNT(PEAK.name) - c.peaksClimbed as unclimbedPeaks FROM PEAK
+INNER JOIN (
+	SELECT COUNT(DISTINCT CLIMBED.peak) as peaksClimbed, peak.region FROM PEAK
+	INNER JOIN CLIMBED
+		ON CLIMBED.PEAK = PEAK.NAME
+	GROUP BY region
+) as c
+on c.region = PEAK.region
+GROUP by PEAK.region
+
+---- Question 10 ----
+select CLIMBED.trip_id, SUM(peak.elev) as totalElev from CLIMBED
+left JOIN PEAK
+	ON peak.name = CLIMBED.PEAK
+left join PARTICIPATED
+	on PARTICIPATED.trip_id = CLIMBED.trip_id
+GROUP by PARTICIPATED.trip_id
+HAVING totalElev > 500000
+ORDER BY totalElev desc
